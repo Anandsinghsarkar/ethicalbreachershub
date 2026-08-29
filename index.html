@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#07110d" />
+  <title>A7 Tools Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="noise"></div>
+
+<!-- AUTH -->
+<section id="authScreen" class="auth-screen">
+  <div class="auth-shell">
+    <div class="auth-brand">
+      <div class="brand-mark big">A7</div>
+      <div>
+        <span class="eyebrow">SECURE TOOLS PLATFORM</span>
+        <h1>A7 Tools Hub</h1>
+        <p>Login or create an account to continue.</p>
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button id="loginTab" class="active" type="button">Login</button>
+        <button id="registerTab" type="button">Register</button>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <label>Email<input id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <label>Password<input id="loginPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="••••••••"></label>
+        <button class="primary full-center" type="submit">Login</button>
+        <button id="forgotPassword" class="link-btn" type="button">Forgot password?</button>
+        <div class="auth-or"><span>OR</span></div>
+        <button id="googleLogin" class="google-btn" type="button"><span class="google-g">G</span> Continue with Google</button>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden">
+        <label>Name<input id="registerName" type="text" maxlength="60" required placeholder="Your name"></label>
+        <label>Email<input id="registerEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <label>Password<input id="registerPassword" type="password" autocomplete="new-password" minlength="6" required placeholder="Minimum 6 characters"></label>
+        <label>Confirm Password<input id="registerConfirm" type="password" autocomplete="new-password" minlength="6" required placeholder="Repeat password"></label>
+        <button class="primary full-center" type="submit">Create Account</button>
+        <p class="tiny">The first account that successfully claims the empty admin slot becomes the admin. Firebase rules prevent later users from replacing it.</p>
+      </form>
+      <div id="authStatus" class="status-box hidden"></div>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="appShell" class="app-shell hidden">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">A7</div>
+      <div><strong>A7 TOOLS</strong><span>SECURE INFO HUB</span></div>
+    </div>
+    <nav>
+      <button class="nav-item active" data-go="home">⌂ <span>Home</span></button>
+      <button class="nav-item" data-go="history">◷ <span>My History</span></button>
+      <button class="nav-item" data-go="premium">★ <span>Premium & Credits</span></button>
+      <button class="nav-item admin-only hidden" data-go="admin">⚙ <span>Admin Panel</span></button>
+      <button class="nav-item" data-go="profile">◉ <span>Profile</span></button>
+      <button class="nav-item" data-go="support">? <span>Support</span></button>
+    </nav>
+    <div class="side-card">
+      <span>Balance</span><strong id="sideBalance">0</strong><small>credits available</small>
+      <span id="sidePremium" class="premium-state">FREE</span>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div><p class="eyebrow">PRIVATE DASHBOARD</p><h1>Tools Hub</h1></div>
+      <div class="top-actions">
+        <div id="roleBadge" class="role-badge">USER</div>
+        <div class="credit-pill">◆ <span id="topBalance">0</span></div>
+        <button id="themeBtn" class="icon-btn" type="button">☾</button>
+        <button id="avatarBtn" class="avatar" type="button">A7</button>
+      </div>
+    </header>
+
+    <section id="home" class="view active-view">
+      <div class="hero">
+        <div>
+          <span class="status-dot"></span><small>SYSTEM ONLINE</small>
+          <h2>One dashboard. All your tools.</h2>
+          <p>Use verified data providers and only query data you are legally authorized to access. Sensitive tools require an authorization confirmation before running.</p>
+        </div>
+        <div class="hero-stats">
+          <div><strong id="toolCount">0</strong><span>Tools</span></div>
+          <div><strong id="premiumHero">FREE</strong><span>Plan</span></div>
+          <div><strong id="balanceHero">0</strong><span>Credits</span></div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="search"><span>⌕</span><input id="searchInput" placeholder="Search tools..." /></div>
+        <div class="page-chip">Page <span id="pageNum">1</span>/4</div>
+      </div>
+      <div id="toolsGrid" class="tools-grid"></div>
+      <div class="pager"><button id="prevBtn">← Previous Page</button><div id="dots" class="dots"></div><button id="nextBtn">Next Page →</button></div>
+    </section>
+
+    <section id="history" class="view">
+      <div class="panel">
+        <div class="section-head"><div><h2>My History</h2><p class="muted">Server-recorded actions. Raw sensitive query values are not stored.</p></div><button id="refreshHistory" class="secondary">Refresh</button></div>
+        <div id="historyList" class="history-list"><p class="muted">No activity yet.</p></div>
+      </div>
+    </section>
+
+    <section id="premium" class="view">
+      <div class="panel">
+        <div class="section-head">
+          <div><h2>Purchase Premium & Credits</h2><p class="muted">Pay securely with UPI/QR or Razorpay. Direct UPI payments activate only after admin verifies the UTR.</p></div>
+          <div id="paymentsState" class="status-pill">Payments loading…</div>
+        </div>
+        <div class="wallet-strip">
+          <article><span>Credits</span><strong id="walletCredits">0</strong></article>
+          <article><span>Premium</span><strong id="walletPlan">Free</strong></article>
+          <article><span>Valid Until</span><strong id="premiumUntil">—</strong></article>
+        </div>
+        <div class="premium-benefits">
+          <h3>💎 PREMIUM</h3>
+          <p>✨ Unlimited searches on tools configured with zero premium cost · ✨ Locked premium features · ✨ Higher service limits · ✨ Premium pricing · ✨ Expiry status</p>
+          <p><b>Premium-only services:</b> UPI INFO · FAMILY INFO · VEHICLE INFO · VEHICLE → NUMBER · NUM TO BANK INFO · VOTER ID INFO</p>
+        </div>
+        <h3 class="catalog-title">📦 AVAILABLE PLANS / PRICE LIST</h3>
+        <div id="catalogGrid" class="pricing"><p class="muted">Loading plans…</p></div>
+        <div class="price-notes">
+          <b>Other listed pricing</b>
+          <span>🛡️ Protect My Self: ₹199 per service</span>
+          <span>🤖 Clone Bot: 15 credits</span>
+          <span>👑 BOT MADE BY: Anand Singh</span>
+        </div>
+        <div class="upi-history-box">
+          <div class="section-head compact"><div><h3>My UPI Payments</h3><p class="muted">Pending payments are activated only after admin verification.</p></div><button id="refreshMyUpi" class="secondary">Refresh</button></div>
+          <div id="myUpiPayments" class="history-list"><p class="muted">No UPI payment submitted yet.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="profile" class="view">
+      <div class="panel profile-panel">
+        <h2>My Profile</h2>
+        <div class="profile-grid">
+          <label>Name<input id="profileName" maxlength="60"></label>
+          <label>Email<input id="profileEmail" disabled></label>
+          <label>User ID<input id="profileUid" disabled></label>
+          <label>Account Role<input id="profileRole" disabled></label>
+        </div>
+        <div class="editor-buttons"><button id="saveProfile" class="primary">Save Profile</button><button id="logoutBtn" class="danger-lite">Logout</button></div>
+      </div>
+    </section>
+
+    <section id="admin" class="view">
+      <div class="panel">
+        <div class="admin-head">
+          <div><span class="admin-badge">⚙ ADMIN ONLY</span><h2>Admin Panel</h2><p class="muted">APIs, users, billing products, credits, premium access and redeem codes are stored in Firebase.</p></div>
+          <label class="payment-toggle"><input id="paymentsEnabledToggle" type="checkbox"> Enable live payments</label>
+        </div>
+
+        <div class="admin-tabs">
+          <button class="active" data-admin-tab="apis">API Manager</button>
+          <button data-admin-tab="users">Users & Credits</button>
+          <button data-admin-tab="billing">Billing Catalog</button>
+          <button data-admin-tab="redeem">Redeem Codes</button>
+          <button data-admin-tab="payments">UPI Payments</button>
+        </div>
+
+        <div id="admin-apis" class="admin-tab-panel active-admin-tab">
+          <div class="api-admin-grid">
+            <div class="api-editor">
+              <h3 id="apiEditorTitle">Add / Edit Tool API</h3>
+              <form id="apiAdminForm" class="admin-form">
+                <input id="editApiSlug" type="hidden">
+                <label>Tool<select id="adminToolSelect"></select></label>
+                <label>API Name<input id="adminApiName" required placeholder="Number Info API"></label>
+                <label>Endpoint Template<input id="adminEndpoint" required placeholder="https://provider.example/?q={query}"></label>
+                <div class="form-row">
+                  <label>Method<select id="adminMethod"><option>GET</option><option>POST</option></select></label>
+                  <label>Response Type<select id="adminResponseType"><option value="auto">Auto</option><option value="json">JSON</option><option value="text">Text</option></select></label>
+                </div>
+                <label>Headers JSON<textarea id="adminHeaders" placeholder='{"Authorization":"Bearer SERVER_TOKEN"}'></textarea></label>
+                <label>POST Body Template<textarea id="adminBody" placeholder='{"query":"{query}"}'></textarea></label>
+                <div class="form-row">
+                  <label>Credit Cost<input id="adminCost" type="number" min="0" step="1" value="1"></label>
+                  <label class="switch-row"><input id="adminPremiumOnly" type="checkbox"> Premium only</label>
+                </div>
+                <label class="switch-row"><input id="adminEnabled" type="checkbox" checked> API enabled</label>
+                <div class="editor-buttons">
+                  <button class="primary" type="submit">Save API</button>
+                  <button class="secondary" id="testAdminApi" type="button">Test API</button>
+                  <button class="secondary" id="clearApiEditor" type="button">Clear</button>
+                </div>
+                <div id="apiTestStatus" class="api-test-status muted">Not tested yet.</div>
+              </form>
+              <div class="api-note">Provider secrets are stored under an admin-only Firebase path and the actual provider request runs from the Cloudflare backend, not from ordinary users' browsers.</div>
+            </div>
+            <div class="api-list-card"><h3>Configured APIs</h3><div id="adminApiRecords" class="api-records"></div></div>
+          </div>
+        </div>
+
+        <div id="admin-users" class="admin-tab-panel">
+          <div class="section-head"><div><h3>Registered Users</h3><p class="muted">Admin can adjust user credits and premium status.</p></div><button id="refreshUsers" class="secondary">Refresh</button></div>
+          <div id="adminUsersList" class="table-wrap"></div>
+        </div>
+
+        <div id="admin-billing" class="admin-tab-panel">
+          <div class="api-admin-grid">
+            <div class="api-editor">
+              <h3>Billing Product</h3>
+              <form id="billingForm" class="admin-form">
+                <input id="billingEditId" type="hidden">
+                <label>Product ID<input id="billingId" required placeholder="credits_100"></label>
+                <label>Display Name<input id="billingLabel" required placeholder="100 Credits"></label>
+                <div class="form-row">
+                  <label>Type<select id="billingType"><option value="credits">Credits</option><option value="premium">Premium</option></select></label>
+                  <label>Price ₹<input id="billingPrice" type="number" min="1" step="0.01" required></label>
+                </div>
+                <div class="form-row">
+                  <label>Credits<input id="billingCredits" type="number" min="0" step="1" value="0"></label>
+                  <label>Premium Days<input id="billingDays" type="number" min="0" step="1" value="0"></label>
+                </div>
+                <label class="switch-row"><input id="billingEnabled" type="checkbox" checked> Product enabled</label>
+                <div class="editor-buttons"><button class="primary" type="submit">Save Product</button><button class="secondary" id="clearBilling" type="button">Clear</button></div>
+              </form>
+              <div class="api-note">Because the supplied Razorpay credentials are live, payments stay disabled until the admin explicitly turns on “Enable live payments”. Configure prices carefully and test using Razorpay test keys first.</div>
+            </div>
+            <div class="api-list-card"><h3>Products</h3><div id="billingRecords" class="api-records"></div></div>
+          </div>
+        </div>
+
+        <div id="admin-redeem" class="admin-tab-panel">
+          <div class="api-admin-grid">
+            <div class="api-editor">
+              <h3>Create Redeem Code</h3>
+              <form id="redeemAdminForm" class="admin-form">
+                <label>Code<input id="redeemAdminCode" required maxlength="32" placeholder="A7BONUS"></label>
+                <div class="form-row">
+                  <label>Credits<input id="redeemAdminCredits" type="number" min="1" step="1" required value="10"></label>
+                  <label>Max Uses<input id="redeemAdminMaxUses" type="number" min="1" step="1" required value="100"></label>
+                </div>
+                <label class="switch-row"><input id="redeemAdminEnabled" type="checkbox" checked> Enabled</label>
+                <button class="primary" type="submit">Save Code</button>
+              </form>
+            </div>
+            <div class="api-list-card"><h3>Redeem Codes</h3><div id="redeemRecords" class="api-records"></div></div>
+          </div>
+        </div>
+
+        <div id="admin-payments" class="admin-tab-panel">
+          <div class="section-head">
+            <div><h3>UPI Payment Verification</h3><p class="muted">Check the UTR in your PhonePe/bank app before approving. Approval immediately grants the selected credits or premium plan.</p></div>
+            <button id="refreshUpiPayments" class="secondary">Refresh</button>
+          </div>
+          <div id="upiPaymentRecords" class="api-records"><div class="empty-admin">Open this tab to load payments.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="support" class="view">
+      <div class="panel">
+        <h2>Help & Support</h2>
+        <div class="support-grid">
+          <article><b>Disclaimer</b><p>Use this dashboard only for lawful, authorized purposes. Do not use private identity or financial data without the subject's permission and a lawful data source.</p></article>
+          <article><b>Protect Myself</b><p>Use strong passwords, 2FA, minimal data collection, server-side secrets, rate limits, HTTPS, audit logs and consent screens.</p></article>
+          <article><b>Payment Security</b><p>Razorpay order creation and payment verification run on the backend. Key Secret must never be placed in frontend JavaScript.</p></article>
+          <article><b>Support</b><p>Add your official support email, Telegram channel or ticket link here.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav id="mobileNav" class="mobile-nav hidden">
+  <button class="active" data-go="home">⌂<span>Home</span></button>
+  <button data-go="history">◷<span>History</span></button>
+  <button data-go="premium">★<span>Premium</span></button>
+  <button class="admin-only hidden" data-go="admin">⚙<span>Admin</span></button>
+  <button data-go="profile">◉<span>Profile</span></button>
+</nav>
+
+<div id="toolModal" class="modal hidden">
+  <div class="modal-card">
+    <button class="close" id="closeModal" type="button">×</button>
+    <div class="modal-icon" id="modalIcon">⌕</div>
+    <h2 id="modalTitle">Tool</h2>
+    <p id="modalDesc" class="muted"></p>
+    <div id="toolPolicy" class="tool-policy"></div>
+    <div id="sensitiveNotice" class="notice hidden">
+      <label class="consent-row"><input id="consentCheck" type="checkbox"> I confirm I am authorized to query this data and have any required consent.</label>
+    </div>
+    <label id="queryLabel">Enter value<input id="toolQuery" autocomplete="off" placeholder="Enter query" /></label>
+    <button class="primary full" id="runTool" type="button">Run Lookup <span>→</span></button>
+    <div id="resultBox" class="result hidden">
+      <div class="result-head"><span>RESULT</span><div class="result-actions"><button id="copyResult" type="button">📋 Copy</button><button id="downloadResult" type="button">⬇ JSON</button></div></div>
+      <div class="result-scroll"><pre id="resultText"></pre></div>
+    </div>
+  </div>
+</div>
+
+<div id="actionModal" class="modal hidden">
+  <div class="modal-card small-card">
+    <button class="close" id="closeActionModal" type="button">×</button>
+    <h2 id="actionTitle">Action</h2>
+    <p id="actionDesc" class="muted"></p>
+    <div id="actionBody"></div>
+  </div>
+</div>
+
+
+<div id="upiPaymentModal" class="modal hidden">
+  <div class="modal-card payment-card">
+    <button class="close" id="closeUpiPayment" type="button">×</button>
+    <div class="payment-brand">₹ UPI PAYMENT</div>
+    <h2 id="upiProductTitle">Purchase</h2>
+    <div class="payment-amount" id="upiAmount">₹0.00</div>
+    <img src="payment-qr.jpg" class="payment-qr" alt="PhonePe UPI QR code">
+    <div class="upi-id-row"><span>UPI ID</span><b id="upiIdText">t7x@axl</b><button id="copyUpiId" class="tiny-btn" type="button">Copy</button></div>
+    <a id="openUpiApp" class="primary full-center upi-link" href="#">Open UPI App</a>
+    <div class="notice payment-notice">Pay the exact selected amount. After payment, enter the UTR / transaction reference below. UTR submission alone does not activate the purchase; admin verification is required.</div>
+    <form id="upiSubmitForm" class="admin-form">
+      <input id="upiProductId" type="hidden">
+      <label>UTR / Transaction ID<input id="upiUtr" required minlength="6" maxlength="40" autocomplete="off" placeholder="Enter payment UTR"></label>
+      <button class="primary full-center" type="submit">Submit Payment for Verification</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="config.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

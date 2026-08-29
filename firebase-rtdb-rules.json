@@ -1,0 +1,101 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "system": {
+      "adminUid": {
+        ".read": "auth != null",
+        ".write": "auth != null && !data.exists() && newData.val() == auth.uid",
+        ".validate": "newData.isString() && newData.val().length > 10"
+      },
+      "paymentsEnabled": {
+        ".read": "auth != null",
+        ".write": "auth != null && root.child('system/adminUid').val() == auth.uid",
+        ".validate": "newData.isBoolean()"
+      }
+    },
+    "profiles": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)",
+        ".write": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)"
+      }
+    },
+    "wallets": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      ".write": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)"
+      }
+    },
+    "premium": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      ".write": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)"
+      }
+    },
+    "history": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)",
+        ".write": false,
+        ".indexOn": [
+          "timestamp"
+        ]
+      }
+    },
+    "apiConfigs": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      ".write": "auth != null && root.child('system/adminUid').val() == auth.uid"
+    },
+    "billingCatalog": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('system/adminUid').val() == auth.uid"
+    },
+    "redeemCodes": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      ".write": "auth != null && root.child('system/adminUid').val() == auth.uid"
+    },
+    "orders": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)",
+        ".write": false
+      }
+    },
+    "claims": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)",
+        ".write": false
+      }
+    },
+    "redeemed": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)",
+        ".write": false
+      }
+    },
+    "orderIndex": {
+      ".read": false,
+      ".write": false
+    },
+    "manualPayments": {
+      ".read": "auth != null && root.child('system/adminUid').val() == auth.uid",
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('system/adminUid').val() == auth.uid)",
+        ".write": false
+      }
+    },
+    "manualPaymentUtr": {
+      ".read": false,
+      ".write": false
+    },
+    "manualPaymentIndex": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
